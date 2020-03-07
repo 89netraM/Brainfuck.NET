@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Brainfuck_NET
 {
@@ -17,8 +18,9 @@ namespace Brainfuck_NET
 		private static readonly IParser<SyntaxGenerator> loopParser = KeepLeft(KeepRight(Common.Char('['), ZeroOrMore(() => statementParser)), Common.Char(']')).Select(xs => Exprs.Loop(xs));
 		private static readonly IParser<SyntaxGenerator> statementParser = shiftParser | incrementParser | outputParser | inputParser | loopParser;
 		private static readonly IParser<IEnumerable<SyntaxGenerator>> parser = statementParser.OnceOrMore();
-		
-		internal static ParsingResult Parse(string source) => parser.Parse(Regex.Replace(source, @"", "")) switch
+
+		internal static ParsingResult ParseFromFile(string filePath) => ParseFromFile(File.ReadAllText(filePath));
+		internal static ParsingResult ParseFromSource(string source) => parser.Parse(Regex.Replace(source, @"", "")) switch
 		{
 			(IEnumerable<SyntaxGenerator> xs, "") => new ParsingResult(true, true, xs),
 			(IEnumerable<SyntaxGenerator> xs, _) => new ParsingResult(true, false, xs),
