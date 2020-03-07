@@ -13,6 +13,17 @@ namespace Brainfuck_NET
 		private const string inputName = "input";
 		private const string enumeratorName = "enumerator";
 
+		static IEnumerable<StatementSyntax> MethodInit(IOKind ioKind)
+		{
+			yield return SyntaxFactory.ParseStatement($"int {pointerName} = 0;");
+			yield return SyntaxFactory.ParseStatement($"byte[] {arrayName} = new byte[{arraySize}];");
+
+			if (ioKind == IOKind.Argument)
+			{
+				yield return SyntaxFactory.ParseStatement($"IEnumerator<byte> {enumeratorName} = {inputName}.GetEnumerator();");
+			}
+		}
+
 		static StatementSyntax Shift(int steps)
 		{
 			return SyntaxFactory.ParseStatement($"{pointerName} += {steps};");
