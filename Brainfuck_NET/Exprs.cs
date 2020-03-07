@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Brainfuck_NET
 {
@@ -24,33 +25,33 @@ namespace Brainfuck_NET
 			}
 		}
 
-		internal static StatementSyntax Shift(int steps)
+		internal static SyntaxGenerator Shift(int steps)
 		{
-			return SyntaxFactory.ParseStatement($"{pointerName} += {steps};");
+			return _ => SyntaxFactory.ParseStatement($"{pointerName} += {steps};");
 		}
 
-		internal static StatementSyntax Increment(int change)
+		internal static SyntaxGenerator Increment(int change)
 		{
-			return SyntaxFactory.ParseStatement($"{arrayName}[{pointerName}] = (byte)(({arrayName}[{pointerName}] + {change}) % 256);");
+			return _ => SyntaxFactory.ParseStatement($"{arrayName}[{pointerName}] = (byte)(({arrayName}[{pointerName}] + {change}) % 256);");
 		}
 
-		internal static StatementSyntax Input(IOKind ioKind) => ioKind switch
+		internal static SyntaxGenerator Input() => ioKind => ioKind switch
 		{
 			IOKind.Argument => SyntaxFactory.ParseStatement($"{arrayName}[{pointerName}] = {enumeratorName}.MoveNext() ? {enumeratorName}.Current : (byte)0;"),
 			IOKind.Console => SyntaxFactory.ParseStatement($"{arrayName}[{pointerName}] = (byte)Console.Read();"),
 			_ => throw new ArgumentException($"Must have valid {nameof(IOKind)}", nameof(ioKind))
 		};
 
-		internal static StatementSyntax Output(IOKind ioKind) => ioKind switch
+		internal static SyntaxGenerator Output() => ioKind => ioKind switch
 		{
 			IOKind.Argument => SyntaxFactory.ParseStatement($"yield return {arrayName}[{pointerName}];"),
 			IOKind.Console => SyntaxFactory.ParseStatement($"Console.Write((char){arrayName}[{pointerName}]);"),
 			_ => throw new ArgumentException($"Must have valid {nameof(IOKind)}", nameof(ioKind))
 		};
 
-		internal static StatementSyntax Loop(IEnumerable<StatementSyntax> innerStatements)
+		internal static SyntaxGenerator Loop(IEnumerable<SyntaxGenerator> innerStatements)
 		{
-			return SyntaxFactory.WhileStatement(SyntaxFactory.ParseExpression($"{arrayName}[{pointerName}] != (byte)0"), SyntaxFactory.Block(innerStatements));
+			return ioKind => SyntaxFactory.WhileStatement(SyntaxFactory.ParseExpression($"{arrayName}[{pointerName}] != (byte)0"), SyntaxFactory.Block(innerStatements.Select(g => g(ioKind))));
 		}
 	}
 }
