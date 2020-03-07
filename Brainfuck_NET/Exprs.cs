@@ -14,7 +14,45 @@ namespace Brainfuck_NET
 		private const string inputName = "input";
 		private const string enumeratorName = "enumerator";
 
-		internal static IEnumerable<StatementSyntax> MethodInit(IOKind ioKind)
+		private static readonly IEnumerable<string> usings = new[]
+		{
+			"System",
+			"System.Collections.Generic"
+		};
+
+		internal static NamespaceDeclarationSyntax Namespace(string namespaceName)
+		{
+			NamespaceDeclarationSyntax @namespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(namespaceName));
+			@namespace = @namespace.WithUsings(SyntaxFactory.List(usings.Select(n => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(n)))));
+
+			return @namespace;
+		}
+
+		internal static ClassDeclarationSyntax Class(string className)
+		{
+			ClassDeclarationSyntax @class = SyntaxFactory.ClassDeclaration(className);
+			@class = @class.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
+
+			return @class;
+		}
+
+		internal static MethodDeclarationSyntax Method(string methodName, IOKind ioKind, IEnumerable<SyntaxGenerator> innerStatements)
+		{
+			TypeSyntax returnType = ioKind switch
+			{
+				IOKind.Argument => SyntaxFactory.ParseTypeName("IEnumerable<byte>"),
+				IOKind.Console => SyntaxFactory.ParseTypeName("void"),
+				_ => throw new ArgumentException($"Must have valid {nameof(IOKind)}", nameof(ioKind))
+			};
+
+			MethodDeclarationSyntax method = SyntaxFactory.MethodDeclaration(returnType, methodName);
+			method = method.WithBody(SyntaxFactory.Block(Enumerable.Concat(MethodInit(ioKind), innerStatements.Select(g => g(ioKind)))));
+			method = method.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
+
+			return method;
+		}
+
+		private static IEnumerable<StatementSyntax> MethodInit(IOKind ioKind)
 		{
 			yield return SyntaxFactory.ParseStatement($"int {pointerName} = 0;");
 			yield return SyntaxFactory.ParseStatement($"byte[] {arrayName} = new byte[{arraySize}];");
