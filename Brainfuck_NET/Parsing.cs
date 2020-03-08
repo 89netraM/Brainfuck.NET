@@ -19,7 +19,7 @@ namespace Brainfuck_NET
 		private static readonly IParser<SyntaxGenerator> statementParser = shiftParser | incrementParser | outputParser | inputParser | loopParser;
 		private static readonly IParser<IEnumerable<SyntaxGenerator>> parser = statementParser.OnceOrMore();
 
-		internal static ParsingResult ParseFromFile(string filePath) => ParseFromFile(File.ReadAllText(filePath));
+		internal static ParsingResult ParseFromFile(string filePath) => ParseFromSource(File.ReadAllText(filePath));
 		internal static ParsingResult ParseFromSource(string source) => parser.Parse(Regex.Replace(source, @"", "")) switch
 		{
 			(IEnumerable<SyntaxGenerator> xs, "") => new ParsingResult(true, true, xs),
