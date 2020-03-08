@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Brainfuck_NET
 {
@@ -6,7 +7,23 @@ namespace Brainfuck_NET
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Hello Brainfuck!");
+			if (args.Length != 2)
+			{
+				Console.WriteLine("Provide two (2) arguments: <srcFile> <\"exe\"|\"dll\">");
+			}
+			else
+			{
+				string outPath = Path.GetDirectoryName(args[0]);
+
+				if (args[1] == "exe")
+				{
+					Compiler.CompileExe(args[0], outPath);
+				}
+				else
+				{
+					Compiler.CompileDll(args[0], outPath, IOKind.Argument);
+				}
+			}
 		}
 	}
 }
