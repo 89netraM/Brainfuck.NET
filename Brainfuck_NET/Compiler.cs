@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Emit;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -36,18 +37,15 @@ namespace Brainfuck_NET
 				optimizationLevel: OptimizationLevel.Release,
 				assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
 
-			//string assembliesPath = Path.GetDirectoryName(typeof(object).Assembly.Location); // @"C:\Windows\Microsoft.NET\Framework64\v4.0.30319";
-			string nuget = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".nuget\packages");
+			string assembliesPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
 			IEnumerable <MetadataReference> references = new[]
 			{
-				//MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "mscorlib.dll")),
-				//MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.dll")),
-				//MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Core.dll")),
-				//MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Runtime.dll")),
-				//MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "Microsoft.CSharp.dll"))
-				MetadataReference.CreateFromFile(Path.Combine(nuget, @"system.runtime\4.3.1\ref\netstandard1.5\System.Runtime.dll")),
-				MetadataReference.CreateFromFile(Path.Combine(nuget, @"system.console\4.3.1\ref\netstandard1.3\System.Console.dll")),
-				MetadataReference.CreateFromFile(Path.Combine(nuget, @"system.collections\4.3.0\ref\netstandard1.3\System.Collections.dll"))
+				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "mscorlib.dll")),
+				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.dll")),
+				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Core.dll")),
+				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Console.dll")),
+				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Runtime.dll")),
+				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Private.CoreLib.dll"))
 			};
 
 			CSharpCompilation compilation = CSharpCompilation.Create(Path.GetFileNameWithoutExtension(sourceFilePath), new[] { tree }, references, options);
