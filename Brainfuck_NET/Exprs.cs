@@ -41,7 +41,7 @@ namespace Brainfuck_NET
 			TypeSyntax returnType = ioKind switch
 			{
 				IOKind.Argument => SyntaxFactory.ParseTypeName("IEnumerable<byte>"),
-				IOKind.Console => SyntaxFactory.ParseTypeName("void"),
+				IOKind.Console => SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.VoidKeyword)),
 				_ => throw new ArgumentException($"Must have valid {nameof(IOKind)}", nameof(ioKind))
 			};
 
