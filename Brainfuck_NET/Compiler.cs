@@ -4,9 +4,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Emit;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using System.Reflection;
 
 namespace Brainfuck_NET
 {
@@ -32,20 +31,16 @@ namespace Brainfuck_NET
 			SyntaxTree tree = MakeProgram(sourceFilePath, ioKind, methodName, className, namespaceName);
 
 			CSharpCompilationOptions options = new CSharpCompilationOptions(
-				isLib ? OutputKind.DynamicallyLinkedLibrary : OutputKind.ConsoleApplication,
+				outputKind: isLib ? OutputKind.DynamicallyLinkedLibrary : OutputKind.ConsoleApplication,
 				mainTypeName: isLib ? null : $"{namespaceName}.{className}",
-				optimizationLevel: OptimizationLevel.Release,
-				assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
-
-			string assembliesPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
-			IEnumerable <MetadataReference> references = new[]
+				optimizationLevel: OptimizationLevel.Release);
+			
+			string assembliesPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "references");
+			IEnumerable<MetadataReference> references = new[]
 			{
-				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "mscorlib.dll")),
-				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.dll")),
-				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Core.dll")),
-				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Console.dll")),
 				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Runtime.dll")),
-				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Private.CoreLib.dll"))
+				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Runtime.Extensions.dll")),
+				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Console.dll"))
 			};
 
 			CSharpCompilation compilation = CSharpCompilation.Create(Path.GetFileNameWithoutExtension(sourceFilePath), new[] { tree }, references, options);
