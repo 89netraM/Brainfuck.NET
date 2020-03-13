@@ -1,4 +1,5 @@
 ﻿using NuGet.Common;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -29,13 +30,10 @@ namespace Brainfuck_NET
 					}
 					catch (DirectoryNotFoundException) { }
 				}
+			}
+			catch (DirectoryNotFoundException) { }
 
-				return null;
-			}
-			catch (DirectoryNotFoundException)
-			{
-				return null;
-			}
+			throw new Exception($"Could not find a netstandard version of {packageId}, please download it with NuGet.");
 		}
 	}
 }

@@ -50,11 +50,7 @@ namespace Brainfuck_NET
 			}
 			else
 			{
-				Console.WriteLine($"Build errors:\n{tree.ToString()}\n");
-				foreach (Diagnostic diag in result.Diagnostics)
-				{
-					Console.WriteLine('\t' + diag.ToString());
-				}
+				throw new Exception("Build errors! This is serious, please report it on GitHub.");
 			}
 		}
 

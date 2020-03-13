@@ -15,13 +15,22 @@ namespace Brainfuck_NET
 			{
 				string outPath = Path.GetDirectoryName(args[0]);
 
-				if (args[1] == "exe")
+				try
 				{
-					Compiler.CompileExe(args[0], outPath);
+					if (args[1] == "exe")
+					{
+						Compiler.CompileExe(args[0], outPath);
+					}
+					else
+					{
+						Compiler.CompileDll(args[0], outPath, IOKind.Argument);
+					}
 				}
-				else
+				catch (Exception ex)
 				{
-					Compiler.CompileDll(args[0], outPath, IOKind.Argument);
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine(ex.Message);
+					Console.ResetColor();
 				}
 			}
 		}
