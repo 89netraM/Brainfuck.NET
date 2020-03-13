@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Brainfuck_NET
+namespace BrainfuckNET
 {
 	class Program
 	{

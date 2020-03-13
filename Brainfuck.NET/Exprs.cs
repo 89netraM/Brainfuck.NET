@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Brainfuck_NET
+namespace BrainfuckNET
 {
 	static class Exprs
 	{

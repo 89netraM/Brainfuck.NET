@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.IO;
 
-namespace Brainfuck_NET
+namespace BrainfuckNET
 {
 	static class Parsing
 	{

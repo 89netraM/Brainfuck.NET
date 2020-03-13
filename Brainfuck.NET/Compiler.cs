@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Brainfuck_NET
+namespace BrainfuckNET
 {
 	static class Compiler
 	{

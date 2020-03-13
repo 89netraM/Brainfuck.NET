@@ -1,4 +1,4 @@
-﻿namespace Brainfuck_NET
+﻿namespace BrainfuckNET
 {
 	enum IOKind
 	{

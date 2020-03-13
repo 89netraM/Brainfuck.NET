@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Brainfuck_NET
+namespace BrainfuckNET
 {
 	delegate StatementSyntax SyntaxGenerator(IOKind ioKind);
 }

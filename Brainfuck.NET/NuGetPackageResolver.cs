@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace Brainfuck_NET
+namespace BrainfuckNET
 {
 	static class NuGetPackageResolver
 	{
