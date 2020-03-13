@@ -21,3 +21,27 @@ to rewrite your whole project.
 ### But why?
 
 Because everyone deserves to get laid sometimes, even .NET brains.
+
+## How?
+
+To compile your own Brainfuck programs, head to the [release page](./releases)
+and download the latest version.
+
+### Usage Example
+
+Compile a Brainfuck source file (`hello.bf`) to an executable.
+```
+> BrainfuckNET hello.bf exe
+```
+
+Compile `cat.bf` to a library where the code is accessible from
+`BFNamespace.BFClass.BFMethod`.
+```
+> BrainfuckNET cat.bf dll
+```
+
+Compile `cat.bf` to a library but the code is now accessible from
+`Repeater.Repeating.Cat` instead.
+```
+> BrainfuckNET cat.bf dll Repeater.Repeating.Cat
+```
