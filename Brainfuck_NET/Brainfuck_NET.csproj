@@ -9,18 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.4.0" />
 		<PackageReference Include="MoreTec_Prat" Version="1.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="references\System.Console.dll">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="references\System.Runtime.dll">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="references\System.Runtime.Extensions.dll">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<PackageReference Include="NuGet.Common" Version="5.4.0" />
 	</ItemGroup>
 
 </Project>

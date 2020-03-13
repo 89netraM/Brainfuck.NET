@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis.Emit;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace Brainfuck_NET
 {
@@ -35,12 +34,11 @@ namespace Brainfuck_NET
 				mainTypeName: isLib ? null : $"{namespaceName}.{className}",
 				optimizationLevel: OptimizationLevel.Release);
 			
-			string assembliesPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "references");
 			IEnumerable<MetadataReference> references = new[]
 			{
-				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Runtime.dll")),
-				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Runtime.Extensions.dll")),
-				MetadataReference.CreateFromFile(Path.Combine(assembliesPath, "System.Console.dll"))
+				MetadataReference.CreateFromFile(NuGetPackageResolver.GetLatestsPath("System.Runtime")),
+				MetadataReference.CreateFromFile(NuGetPackageResolver.GetLatestsPath("System.Runtime.Extensions")),
+				MetadataReference.CreateFromFile(NuGetPackageResolver.GetLatestsPath("System.Console"))
 			};
 
 			CSharpCompilation compilation = CSharpCompilation.Create(Path.GetFileNameWithoutExtension(sourceFilePath), new[] { tree }, references, options);
